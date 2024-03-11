@@ -1,41 +1,34 @@
 import streamlit as st
 import pandas as pd
 import joblib
-
+from PIL import Image
 
 # streamlit run app.py
 
-# read KMeans model
-kmeans_model = joblib.load('kmeans_model.joblib')
+# title 
+st.markdown("<h1 style='text-align: center;'>Airbnbs in Copenhagen 2023</h1>", unsafe_allow_html=True)
 
-# read edited listings data
-cph_listings_df = pd.read_csv('cph_listings_df_edited.csv')
+# # image
+logo = Image.open('media/airbnb.png')
+st.image(logo, use_column_width=True)
 
-# method to filter listings based on number of reviews
-def filter_boliger(min_review):
+# intro
+st.write("In a world were travel is more prevalent than ever, and with the increasing competition for accommodations, aswell as a search for unique experiences, Airbnb remains more relevant than ever.")
+st.write("Therefore we deciced to explore the Airbnb market in Copenhagen, to see if we could find some interesting insights.")
+st.write("Here are the questions we sought to answer:")
 
-    # add each listing to a cluster
-    listing_clusters = kmeans_model.predict(cph_listings_df[['price', 'number_of_reviews']])
-    
-    # save in df
-    cph_listings_df['cluster'] = listing_clusters
-    
-    # Beregn det gennemsnitlige antal anmeldelser for hver klynge
-    klynge_gns_anmeldelser = cph_listings_df.groupby('cluster')['number_of_reviews'].mean()
-    
-    # Filtrer boliger baseret på brugerens input for minimum antal anmeldelser
-    filtrerede_boliger = cph_listings_df[cph_listings_df['number_of_reviews'] >= min_review]
-    
-    return filtrerede_boliger
+# problem statement? maybe your predictions? 
+st.write("- What affects the price of an Airbnb?")
+st.write("- Can you increase your revenue from your Airbnb?")
+st.write("- Does review affect your Airbnb?")
 
-# Streamlit-app
-st.title('Boligsortering efter anmeldelser')
 
-# user input
-min_review = st.slider('Minimum Antal Anmeldelser:', min_value=0, max_value=int(cph_listings_df['number_of_reviews'].max()), value=0)
 
-# Filtrer boliger baseret på brugerinput
-filtrerede_data = filter_boliger(min_review)
 
-# Vis filtrerede data
-st.dataframe(filtrerede_data)
+
+
+st.write("Hvilke Airbnb typer tjener mest per år.")
+st.write("Påvirker befolkningstætheden prisen på Airbnb's?")
+st.write("Påvirker befolkningstætheden antallet af Airbnb's?")
+st.write("Er priserne højere der, hvor der er høj befolkningstæthed?")
+
